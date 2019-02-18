@@ -187,7 +187,7 @@ namespace BSApp_DisplayAmpel
 
                 while (true)
                 {
-                    var ClientEp = new IPEndPoint(IPAddress.Any, 15000);
+                    var ClientEp = new IPEndPoint(IPAddress.Any, 0);
                     var ClientRequestData = Server.Receive(ref ClientEp);
                     var ClientRequest = Encoding.ASCII.GetString(ClientRequestData);
 

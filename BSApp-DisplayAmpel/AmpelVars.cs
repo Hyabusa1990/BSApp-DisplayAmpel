@@ -18,14 +18,121 @@ namespace BSApp_DisplayAmpel
         private string str_time = "120";
         private string str_data = "";
 
-        public bool Bo_horn { get => bo_horn; set => bo_horn = value; }
-        public bool Bo_red { get => bo_red; set => bo_red = value; }
-        public bool Bo_yellow { get => bo_yellow; set => bo_yellow = value; }
-        public bool Bo_green { get => bo_green; set => bo_green = value; }
-        public bool Bo_abcd { get => bo_abcd; set => bo_abcd = value; }
-        public bool Bo_time { get => bo_time; set => bo_time = value; }
-        public string Str_abcd { get => str_abcd; set => str_abcd = value; }
-        public string Str_time { get => str_time; set => str_time = value; }
-        public string Str_data { get => str_data; set => str_data = value; }
+        public bool Bo_horn
+        {
+            get
+            {
+                return bo_horn;
+            }
+
+            set
+            {
+                bo_horn = value;
+            }
+        }
+
+        public bool Bo_red
+        {
+            get
+            {
+                return bo_red;
+            }
+
+            set
+            {
+                bo_red = value;
+            }
+        }
+
+        public bool Bo_yellow
+        {
+            get
+            {
+                return bo_yellow;
+            }
+
+            set
+            {
+                bo_yellow = value;
+            }
+        }
+
+        public bool Bo_green
+        {
+            get
+            {
+                return bo_green;
+            }
+
+            set
+            {
+                bo_green = value;
+            }
+        }
+
+        public bool Bo_abcd
+        {
+            get
+            {
+                return bo_abcd;
+            }
+
+            set
+            {
+                bo_abcd = value;
+            }
+        }
+
+        public bool Bo_time
+        {
+            get
+            {
+                return bo_time;
+            }
+
+            set
+            {
+                bo_time = value;
+            }
+        }
+
+        public string Str_abcd
+        {
+            get
+            {
+                return str_abcd;
+            }
+
+            set
+            {
+                str_abcd = value;
+            }
+        }
+
+        public string Str_time
+        {
+            get
+            {
+                return str_time;
+            }
+
+            set
+            {
+                str_time = value;
+            }
+        }
+
+        public string Str_data
+        {
+            get
+            {
+                return str_data;
+            }
+
+            set
+            {
+                str_data = value;
+            }
+        }
     }
 }

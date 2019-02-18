@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_main));
             this.tlp_vert = new System.Windows.Forms.TableLayoutPanel();
             this.pb_yLine = new System.Windows.Forms.PictureBox();
             this.tlp_color = new System.Windows.Forms.TableLayoutPanel();
@@ -88,7 +89,7 @@
             this.tlp_color.Name = "tlp_color";
             this.tlp_color.RowCount = 1;
             this.tlp_color.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlp_color.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            this.tlp_color.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74F));
             this.tlp_color.Size = new System.Drawing.Size(354, 74);
             this.tlp_color.TabIndex = 1;
             // 
@@ -173,6 +174,7 @@
             this.Font = new System.Drawing.Font("Open Sans Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Frm_main";
             this.Text = "BSApp-DisplayAmpel";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
