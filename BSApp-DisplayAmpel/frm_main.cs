@@ -182,17 +182,52 @@ namespace BSApp_DisplayAmpel
         {
             try
             {
-                var Server = new UdpClient(15000);
-                //var ResponseData = Encoding.ASCII.GetBytes("SomeResponseData");
+                /*var Server = new UdpClient(15000);
+                //var ResponseData = Encoding.ASCII.GetBytes("SomeResponseData");*/
+
+                IPAddress address = IPAddress.Parse("224.1.1.1");  // Zieladresse
+
+                int port = Int32.Parse("15000");    // Multicast port
+
+                Socket sock = new Socket(AddressFamily.InterNetwork,
+                                         SocketType.Dgram,
+                                         ProtocolType.Udp); // Multicast Socket
+
+                // Adresse wiederverwenden
+                sock.SetSocketOption(SocketOptionLevel.Socket,
+                                     SocketOptionName.ReuseAddress, 1);
+
+                // Generiere Endpunkt
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, port);
+                sock.Bind(endPoint);
+
+                // Mitgliedschaft in der Multicast Gruppe
+                sock.SetSocketOption(SocketOptionLevel.IP,
+                                     SocketOptionName.AddMembership,
+                                     new MulticastOption(address, IPAddress.Any));
+
+                
 
                 while (true)
                 {
-                    var ClientEp = new IPEndPoint(IPAddress.Any, 0);
+                    /*var ClientEp = new IPEndPoint(IPAddress.Any, 0);
                     var ClientRequestData = Server.Receive(ref ClientEp);
                     var ClientRequest = Encoding.ASCII.GetString(ClientRequestData);
 
                     vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);
-                    //Server.Send(ResponseData, ResponseData.Length, ClientEp);
+                    //Server.Send(ResponseData, ResponseData.Length, ClientEp);*/
+
+                    IPEndPoint receivePoint = new IPEndPoint(IPAddress.Any, 0);
+                    EndPoint tempReceivePoint = (EndPoint)receivePoint;
+                    byte[] packet = new byte[sock.ReceiveBufferSize];
+
+
+                    int length = sock.ReceiveFrom(packet, 0, sock.ReceiveBufferSize, SocketFlags.None, ref tempReceivePoint);
+
+                    var ClientRequest = Encoding.ASCII.GetString(packet);
+
+                    vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);
+
                 }
             }
             catch { }
