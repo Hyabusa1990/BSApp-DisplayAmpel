@@ -183,7 +183,7 @@ namespace BSApp_DisplayAmpel
             try
             {
                 /*var Server = new UdpClient(15000);
-                //var ResponseData = Encoding.ASCII.GetBytes("SomeResponseData");*/
+                //var ResponseData = Encoding.ASCII.GetBytes("SomeResponseData");
 
                 IPAddress address = IPAddress.Parse("224.1.1.1");  // Zieladresse
 
@@ -204,9 +204,14 @@ namespace BSApp_DisplayAmpel
                 // Mitgliedschaft in der Multicast Gruppe
                 sock.SetSocketOption(SocketOptionLevel.IP,
                                      SocketOptionName.AddMembership,
-                                     new MulticastOption(address, IPAddress.Any));
+                                     new MulticastOption(address, IPAddress.Any));*/
 
-                
+                Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                IPEndPoint iep = new IPEndPoint(IPAddress.Any, 9050);
+                sock.Bind(iep);
+                EndPoint ep = (EndPoint)iep;
+
+
 
                 while (true)
                 {
@@ -215,7 +220,7 @@ namespace BSApp_DisplayAmpel
                     var ClientRequest = Encoding.ASCII.GetString(ClientRequestData);
 
                     vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);
-                    //Server.Send(ResponseData, ResponseData.Length, ClientEp);*/
+                    //Server.Send(ResponseData, ResponseData.Length, ClientEp);
 
                     IPEndPoint receivePoint = new IPEndPoint(IPAddress.Any, 0);
                     EndPoint tempReceivePoint = (EndPoint)receivePoint;
@@ -226,8 +231,15 @@ namespace BSApp_DisplayAmpel
 
                     var ClientRequest = Encoding.ASCII.GetString(packet);
 
-                    vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);
+                    vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);*/
 
+                    byte[] data = new byte[sock.ReceiveBufferSize];
+                    int recv = sock.ReceiveFrom(data, ref ep);
+                    if (recv > 0)
+                    {
+                        string stringData = Encoding.ASCII.GetString(data, 0, recv);
+                        vars = JsonConvert.DeserializeObject<AmpelVars>(stringData);
+                    }
                 }
             }
             catch { }
