@@ -11,6 +11,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Newtonsoft.Json;
+using System.IO;
+using System.Collections.Specialized;
 
 namespace BSApp_DisplayAmpel
 {
@@ -18,6 +20,9 @@ namespace BSApp_DisplayAmpel
     {
         
         private bool bo_hornIsPlay = false;
+        WebClient webClient = new WebClient();
+
+        string url = "http://localhost.de/ampel.php";
 
         SoundPlayer player;
         AmpelVars vars = new AmpelVars();
@@ -25,6 +30,19 @@ namespace BSApp_DisplayAmpel
         public Frm_main()
         {
             InitializeComponent();
+
+            try
+            {
+                StreamReader sr = new StreamReader(Environment.CurrentDirectory + "\\config.cfg");
+                string buffer = sr.ReadToEnd();
+
+                Dictionary<string, string> buf = JsonConvert.DeserializeObject<Dictionary<string, string>>(buffer);
+                url = buf["url"];
+                vars.Int_ID = Convert.ToInt32(buf["AmpelID"]);
+
+
+            }
+            catch (Exception ex) { }
         }
 
         private void frm_main_Load(object sender, EventArgs e)
@@ -37,7 +55,6 @@ namespace BSApp_DisplayAmpel
             btn_abcd.Text = "AB";
             set_FontSize();
             player = new SoundPlayer(Properties.Resources.HORN);
-            bgw_UDPClient.RunWorkerAsync();
         }
 
         private void Frm_main_ResizeEnd(object sender, EventArgs e)
@@ -50,16 +67,23 @@ namespace BSApp_DisplayAmpel
         {
             Graphics g = this.CreateGraphics();
 
+            string tmpTxt = "123";
+
+
             float sizeX = 0;
             float sizeY = 0;
             int fontSize = 1;
             //LBL Time
+            if (lbl_time.Text != "")
+            {
+                tmpTxt = lbl_time.Text;
+            }
             do
             {
                 fontSize++;
                 lbl_time.Font = new Font(lbl_time.Font.FontFamily, fontSize);
                 SizeF stringSize = new SizeF();
-                stringSize = g.MeasureString(lbl_time.Text, lbl_time.Font);
+                stringSize = g.MeasureString(tmpTxt, lbl_time.Font);
                 sizeX = stringSize.Width;
                 sizeY = stringSize.Height;
             }
@@ -69,12 +93,17 @@ namespace BSApp_DisplayAmpel
             sizeX = 0;
             sizeY = 0;
             fontSize = 1;
+            if (btn_abcd.Text != "")
+            {
+                tmpTxt = btn_abcd.Text;
+            }
+            
             do
             {
                 fontSize++;
                 btn_abcd.Font = new Font(btn_abcd.Font.FontFamily, fontSize);
                 SizeF stringSize = new SizeF();
-                stringSize = g.MeasureString(btn_abcd.Text, btn_abcd.Font);
+                stringSize = g.MeasureString(tmpTxt, btn_abcd.Font);
                 sizeX = stringSize.Width;
                 sizeY = stringSize.Height;
             }
@@ -155,7 +184,7 @@ namespace BSApp_DisplayAmpel
 
             if (!vars.Bo_time)
             {
-                lbl_time.Text = vars.Str_time;
+                lbl_time.Text = vars.Str_data.Replace("\\n", Environment.NewLine);
                 set_FontSize();
             }
             else
@@ -175,74 +204,38 @@ namespace BSApp_DisplayAmpel
 
         private void tim_update_Tick(object sender, EventArgs e)
         {
-            update_Display();
-        }
-
-        private void bgw_UDPClient_DoWork(object sender, DoWorkEventArgs e)
-        {
             try
             {
-                /*var Server = new UdpClient(15000);
-                //var ResponseData = Encoding.ASCII.GetBytes("SomeResponseData");
+                string respo = "";
+                Dictionary<string, string> resp;
+                respo = Encoding.UTF8.GetString(webClient.UploadValues(url, new NameValueCollection() {
+                        {"act", "get"},
+                        {"q", "r" + vars.Int_ID +
+                        "g" + vars.Int_ID +
+                        "y" + vars.Int_ID +
+                        "da" +
+                        "ho" +
+                        "t" + vars.Int_ID +
+                        "ab" +
+                        "bt" +
+                        "ba"},
+                    }));
 
-                IPAddress address = IPAddress.Parse("224.1.1.1");  // Zieladresse
+                resp = JsonConvert.DeserializeObject<Dictionary<string, string>>(respo);
+                vars.Bo_red = Convert.ToBoolean(resp["r" + vars.Int_ID]);
+                vars.Bo_green = Convert.ToBoolean(resp["g" + vars.Int_ID]);
+                vars.Bo_yellow = Convert.ToBoolean(resp["y" + vars.Int_ID]);
 
-                int port = Int32.Parse("15000");    // Multicast port
-
-                Socket sock = new Socket(AddressFamily.InterNetwork,
-                                         SocketType.Dgram,
-                                         ProtocolType.Udp); // Multicast Socket
-
-                // Adresse wiederverwenden
-                sock.SetSocketOption(SocketOptionLevel.Socket,
-                                     SocketOptionName.ReuseAddress, 1);
-
-                // Generiere Endpunkt
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, port);
-                sock.Bind(endPoint);
-
-                // Mitgliedschaft in der Multicast Gruppe
-                sock.SetSocketOption(SocketOptionLevel.IP,
-                                     SocketOptionName.AddMembership,
-                                     new MulticastOption(address, IPAddress.Any));*/
-
-                Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                IPEndPoint iep = new IPEndPoint(IPAddress.Any, 9050);
-                sock.Bind(iep);
-                EndPoint ep = (EndPoint)iep;
-
-
-
-                while (true)
-                {
-                    /*var ClientEp = new IPEndPoint(IPAddress.Any, 0);
-                    var ClientRequestData = Server.Receive(ref ClientEp);
-                    var ClientRequest = Encoding.ASCII.GetString(ClientRequestData);
-
-                    vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);
-                    //Server.Send(ResponseData, ResponseData.Length, ClientEp);
-
-                    IPEndPoint receivePoint = new IPEndPoint(IPAddress.Any, 0);
-                    EndPoint tempReceivePoint = (EndPoint)receivePoint;
-                    byte[] packet = new byte[sock.ReceiveBufferSize];
-
-
-                    int length = sock.ReceiveFrom(packet, 0, sock.ReceiveBufferSize, SocketFlags.None, ref tempReceivePoint);
-
-                    var ClientRequest = Encoding.ASCII.GetString(packet);
-
-                    vars = JsonConvert.DeserializeObject<AmpelVars>(ClientRequest);*/
-
-                    byte[] data = new byte[sock.ReceiveBufferSize];
-                    int recv = sock.ReceiveFrom(data, ref ep);
-                    if (recv > 0)
-                    {
-                        string stringData = Encoding.ASCII.GetString(data, 0, recv);
-                        vars = JsonConvert.DeserializeObject<AmpelVars>(stringData);
-                    }
-                }
+                vars.Bo_horn = Convert.ToBoolean(resp["ho"]);
+                vars.Str_data = resp["da"];
+                vars.Str_time = resp["t" + vars.Int_ID];
+                vars.Str_abcd = resp["ab"];
+                vars.Bo_time = Convert.ToBoolean(resp["bt"]);
+                vars.Bo_abcd = Convert.ToBoolean(resp["ba"]);
             }
-            catch { }
+            catch (Exception ex) { }
+
+            update_Display();
         }
     }
 }

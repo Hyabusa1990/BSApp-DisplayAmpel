@@ -9,6 +9,8 @@ namespace BSApp_DisplayAmpel
     {
         private bool bo_horn = false;
 
+        private int int_ID = 1;
+
         private bool bo_red = true;
         private bool bo_yellow = false;
         private bool bo_green = false;
@@ -28,6 +30,19 @@ namespace BSApp_DisplayAmpel
             set
             {
                 bo_horn = value;
+            }
+        }
+
+        public int Int_ID
+        {
+            get
+            {
+                return int_ID;
+            }
+
+            set
+            {
+                int_ID = value;
             }
         }
 

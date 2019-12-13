@@ -86,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BSApp-DispAmp.ico" />
+    <None Include="config.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

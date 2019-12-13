@@ -157,21 +157,20 @@
             // tim_update
             // 
             this.tim_update.Enabled = true;
-            this.tim_update.Interval = 10;
             this.tim_update.Tick += new System.EventHandler(this.tim_update_Tick);
             // 
             // bgw_UDPClient
             // 
-            this.bgw_UDPClient.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgw_UDPClient_DoWork);
+            this.bgw_UDPClient.WorkerSupportsCancellation = true;
             // 
             // Frm_main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(360, 240);
             this.Controls.Add(this.tlp_vert);
-            this.Font = new System.Drawing.Font("Open Sans Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
