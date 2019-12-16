@@ -39,7 +39,6 @@
             this.btn_yellow = new System.Windows.Forms.Button();
             this.lbl_time = new System.Windows.Forms.Label();
             this.tim_update = new System.Windows.Forms.Timer(this.components);
-            this.bgw_UDPClient = new System.ComponentModel.BackgroundWorker();
             this.tlp_vert.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_yLine)).BeginInit();
             this.tlp_color.SuspendLayout();
@@ -159,10 +158,6 @@
             this.tim_update.Enabled = true;
             this.tim_update.Tick += new System.EventHandler(this.tim_update_Tick);
             // 
-            // bgw_UDPClient
-            // 
-            this.bgw_UDPClient.WorkerSupportsCancellation = true;
-            // 
             // Frm_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -198,7 +193,6 @@
         private System.Windows.Forms.Button btn_yellow;
         private System.Windows.Forms.Label lbl_time;
         private System.Windows.Forms.Timer tim_update;
-        private System.ComponentModel.BackgroundWorker bgw_UDPClient;
     }
 }
 
