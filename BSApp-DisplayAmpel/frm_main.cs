@@ -206,19 +206,24 @@ namespace BSApp_DisplayAmpel
         {
             try
             {
+                Dictionary<string, List<string>> getReg = new Dictionary<string, List<string>>();
+                List<string> args = new List<string>();
+                args.Add("r" + vars.Int_ID);
+                args.Add("g" + vars.Int_ID);
+                args.Add("y" + vars.Int_ID);
+                args.Add("da");
+                args.Add("ho");
+                args.Add("ab");
+                args.Add("bt");
+                args.Add("ba");
+                args.Add("t" + vars.Int_ID);
+                getReg.Add("q", args);
+
                 string respo = "";
                 Dictionary<string, string> resp;
                 respo = Encoding.UTF8.GetString(webClient.UploadValues(url, new NameValueCollection() {
                         {"act", "get"},
-                        {"q", "r" + vars.Int_ID +
-                        "g" + vars.Int_ID +
-                        "y" + vars.Int_ID +
-                        "da" +
-                        "ho" +
-                        "t" + vars.Int_ID +
-                        "ab" +
-                        "bt" +
-                        "ba"},
+                        {"q", JsonConvert.SerializeObject(getReg)},
                     }));
 
                 resp = JsonConvert.DeserializeObject<Dictionary<string, string>>(respo);
